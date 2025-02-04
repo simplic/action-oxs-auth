@@ -1,2 +1,5 @@
-# action-oxs-auth
-A repository for a Github action to authorize into simplic oxs
+# Simplic action-oxs-auth
+
+This action allows to get a bearer-token to access simplic-oxs api.
+
+The actions need as input a email, a password and the URL to access simplic-oxs.
