@@ -1,4 +1,4 @@
-name: 'action-oxs-auth'
+name: 'oxs-auth'
 description: 'Authenticates with a Web API and retrieves a bearer token'
 
 branding:
