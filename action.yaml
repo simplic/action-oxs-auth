@@ -1,0 +1,47 @@
+name: 'oxs-auth'
+description: 'Authenticates with a Web API and retrieves a bearer token'
+
+branding:
+  icon: log-in
+  color: 'blue'
+
+inputs:
+  email:
+    description: 'Email for the API authentication'
+    required: true
+  password:
+    description: 'Password for the API authentication'
+    required: true
+  auth-url:
+    description: 'The authentication URL for the API'
+    required: true
+
+outputs:
+  bearer-token:
+    description: 'The retrieved bearer token'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install jq
+      shell: bash
+      run: sudo apt-get install -y jq
+
+    - name: Get Bearer Token
+      env:
+        AUTH_URL: ${{ inputs.auth-url }}
+        EMAIL: ${{ inputs.email }}
+        PASSWORD: ${{ inputs.password }}
+      shell: bash
+      run: |
+        # Send the authentication request
+        response=$(curl -s -X POST "$AUTH_URL/login" \
+          -H 'accept: application/json' \
+          -H "Content-Type: application/json" \
+          -d "{\"email\": \"$EMAIL\", \"password\": \"$PASSWORD\"}")
+
+        # Parse the JSON response to extract the token
+        token=$(echo "$response" | jq -r .token)
+
+        # Set the bearer token as an output
+        echo "bearer-token=$token" >> $GITHUB_ENV
